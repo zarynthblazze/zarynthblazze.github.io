@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Zarynth Blazze — 2D & 3D character artist. Original artwork, commissions, and design." />
+  <meta name="theme-color" content="#0E0D12" />
+  <title>Zarynth Blazze — 2D & 3D Character Art</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            // dark theme
+            ink: '#0E0D12',
+            surface: '#16151B',
+            elevated: '#1E1C24',
+            line: '#2A2832',
+            text: '#EDE9E3',
+            muted: '#8B8A93',
+            accent: '#E8B589',
+            'accent-2': '#C99572',
+            // light theme
+            cream: '#F7F3EE',
+            'cream-surface': '#FFFFFF',
+            'cream-line': '#E7DFD5',
+            'cream-text': '#1A1620',
+            'cream-muted': '#7A7080',
+            plum: '#6B4B6E',
+            'plum-2': '#4D3251',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease forwards',
+            'float-slow': 'float 7s ease-in-out infinite',
+            'float-slower': 'float 11s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: 0, transform: 'translateY(12px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-22px)' } },
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="font-sans bg-cream text-cream-text dark:bg-ink dark:text-text antialiased selection:bg-accent/30 dark:selection:bg-accent/30">
+
+  <!-- Ambient orbs -->
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Grain overlay -->
+  <div aria-hidden="true" class="grain pointer-events-none fixed inset-0 -z-10 opacity-[0.04] dark:opacity-[0.06]"></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="fixed top-0 inset-x-0 z-50">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <nav id="nav" class="mt-4 flex items-center justify-between rounded-full border border-cream-line/70 dark:border-line/70 bg-cream-surface/60 dark:bg-surface/60 backdrop-blur-xl px-4 sm:px-6 py-3 transition-all">
+        <a href="#top" class="flex items-center gap-2 group">
+          <span class="grid place-items-center w-8 h-8 rounded-full bg-plum dark:bg-accent text-cream dark:text-ink font-display text-sm">Z</span>
+          <span class="font-display text-base sm:text-lg tracking-tight">Zarynth Blazze</span>
+        </a>
+
+        <ul class="hidden md:flex items-center gap-7 text-sm text-cream-muted dark:text-muted">
+          <li><a class="nav-link" href="#about">About</a></li>
+          <li><a class="nav-link" href="#work-2d">2D</a></li>
+          <li><a class="nav-link" href="#work-3d">3D</a></li>
+          <li><a class="nav-link" href="#commissions">Commissions</a></li>
+          <li><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="flex items-center gap-2">
+          <button id="theme-toggle" aria-label="Toggle theme" class="grid place-items-center w-9 h-9 rounded-full border border-cream-line dark:border-line hover:bg-cream-line/40 dark:hover:bg-line/40 transition">
+            <!-- sun icon -->
+            <svg class="hidden dark:block w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            <!-- moon icon -->
+            <svg class="block dark:hidden w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+          </button>
+          <a href="#commissions" class="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-plum dark:bg-accent text-cream dark:text-ink px-4 py-2 text-sm font-medium hover:opacity-90 transition">
+            Commission
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <button id="menu-btn" class="md:hidden grid place-items-center w-9 h-9 rounded-full border border-cream-line dark:border-line" aria-label="Menu">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+
+      <!-- mobile menu -->
+      <div id="mobile-menu" class="md:hidden hidden mt-2 rounded-3xl border border-cream-line dark:border-line bg-cream-surface dark:bg-surface p-4">
+        <ul class="flex flex-col gap-1 text-sm">
+          <li><a class="block px-3 py-2 rounded-xl hover:bg-cream-line/40 dark:hover:bg-line/40" href="#about">About</a></li>
+          <li><a class="block px-3 py-2 rounded-xl hover:bg-cream-line/40 dark:hover:bg-line/40" href="#work-2d">2D Work</a></li>
+          <li><a class="block px-3 py-2 rounded-xl hover:bg-cream-line/40 dark:hover:bg-line/40" href="#work-3d">3D Work</a></li>
+          <li><a class="block px-3 py-2 rounded-xl hover:bg-cream-line/40 dark:hover:bg-line/40" href="#commissions">Commissions</a></li>
+          <li><a class="block px-3 py-2 rounded-xl hover:bg-cream-line/40 dark:hover:bg-line/40" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="relative pt-40 sm:pt-44 pb-24 sm:pb-36">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <div class="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted reveal">
+          <span class="inline-block w-8 h-px bg-current opacity-50"></span>
+          Independent character artist
+        </div>
+
+        <h1 class="reveal mt-6 font-display text-[clamp(2.75rem,9vw,7.5rem)] leading-[0.95] tracking-tight">
+          <span class="block">Crafting</span>
+          <span class="block italic font-light text-plum dark:text-accent">characters</span>
+          <span class="block">that linger.</span>
+        </h1>
+
+        <div class="reveal mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6 max-w-5xl">
+          <p class="max-w-md text-cream-muted dark:text-muted leading-relaxed">
+            A portfolio of original 2D illustration and 3D character work — soft palettes,
+            cinematic light, and a love for the strange and tender.
+          </p>
+          <div class="flex items-center gap-3">
+            <a href="#work-2d" class="group inline-flex items-center gap-2 rounded-full bg-plum dark:bg-accent text-cream dark:text-ink px-5 py-3 text-sm font-medium hover:opacity-90 transition">
+              View work
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#contact" class="inline-flex items-center gap-2 rounded-full border border-cream-line dark:border-line px-5 py-3 text-sm font-medium hover:bg-cream-line/30 dark:hover:bg-line/30 transition">
+              Get in touch
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero showcase strip -->
+        <div class="reveal mt-16 sm:mt-24 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+          <div class="hero-card group aspect-[3/4] rounded-2xl overflow-hidden relative">
+            <img src="images/vulpine-character.jpg" alt="Vulpine character — yellow anthro design" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+            <span class="absolute bottom-3 left-4 text-cream text-xs tracking-wide">Vulpine · 2D</span>
+          </div>
+          <div class="hero-card group aspect-[3/4] rounded-2xl overflow-hidden relative md:translate-y-6">
+            <img src="images/draconyss-beach.jpg" alt="Pink draconyss character on a beach" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+            <span class="absolute bottom-3 left-4 text-cream text-xs tracking-wide">Draconyss · 2D</span>
+          </div>
+          <div class="hero-card group aspect-[3/4] rounded-2xl overflow-hidden relative col-span-2 md:col-span-1">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#5b6cff] via-[#8a6dc6] to-[#26203a]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent"></div>
+            <div class="absolute inset-0 flex flex-col items-start justify-end p-5 sm:p-6">
+              <span class="text-[0.65rem] uppercase tracking-[0.25em] text-cream/80">In studio</span>
+              <span class="font-display text-cream text-lg sm:text-xl mt-1">3D pieces — coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10 flex items-center gap-3 text-xs text-cream-muted dark:text-muted">
+          <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span></span>
+          Currently open for commissions
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <section class="border-y border-cream-line dark:border-line py-5 overflow-hidden">
+      <div class="marquee whitespace-nowrap flex gap-12 text-cream-muted dark:text-muted font-display text-xl sm:text-2xl italic">
+        <span>character design</span><span>·</span>
+        <span>illustration</span><span>·</span>
+        <span>3D sculpting</span><span>·</span>
+        <span>concept art</span><span>·</span>
+        <span>commissions open</span><span>·</span>
+        <span>character design</span><span>·</span>
+        <span>illustration</span><span>·</span>
+        <span>3D sculpting</span><span>·</span>
+        <span>concept art</span><span>·</span>
+        <span>commissions open</span><span>·</span>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="py-28 sm:py-40">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-5 reveal">
+          <div class="relative">
+            <div class="aspect-[4/5] rounded-3xl overflow-hidden bg-gradient-to-br from-plum/30 to-accent/30 dark:from-accent/30 dark:to-plum/30 relative">
+              <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]"></div>
+              <div class="absolute bottom-6 left-6 right-6 bg-cream-surface/80 dark:bg-surface/80 backdrop-blur rounded-2xl p-4 border border-cream-line dark:border-line">
+                <div class="text-xs uppercase tracking-widest text-cream-muted dark:text-muted">Based in</div>
+                <div class="font-display text-lg">Somewhere quiet, drawing loud.</div>
+              </div>
+            </div>
+            <div class="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-plum dark:bg-accent grid place-items-center text-cream dark:text-ink font-display text-xs leading-tight text-center px-2 rotate-[-8deg]">
+              Open<br/>for<br/>work
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 reveal">
+          <div class="text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">About</div>
+          <h2 class="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.05]">
+            I draw characters that <span class="italic text-plum dark:text-accent">feel like people</span> you almost remember.
+          </h2>
+          <p class="mt-8 text-cream-muted dark:text-muted leading-relaxed max-w-xl">
+            I've spent the last several years making 2D illustrations and 3D character sculpts
+            for indie games, tabletop creators, writers, and people who simply love a face with
+            a story behind it. My work leans toward soft light, warm color, and the small details
+            that make a character breathe.
+          </p>
+
+          <div class="mt-10 grid sm:grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-cream-line dark:border-line p-5 bg-cream-surface/50 dark:bg-surface/50">
+              <div class="font-display text-3xl">120+</div>
+              <div class="text-sm text-cream-muted dark:text-muted mt-1">Completed commissions</div>
+            </div>
+            <div class="rounded-2xl border border-cream-line dark:border-line p-5 bg-cream-surface/50 dark:bg-surface/50">
+              <div class="font-display text-3xl">6 yrs</div>
+              <div class="text-sm text-cream-muted dark:text-muted mt-1">Working as a freelance artist</div>
+            </div>
+          </div>
+
+          <div class="mt-10">
+            <div class="text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted mb-4">Tools</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="chip">Procreate</span>
+              <span class="chip">Photoshop</span>
+              <span class="chip">Clip Studio</span>
+              <span class="chip">Blender</span>
+              <span class="chip">ZBrush</span>
+              <span class="chip">Substance</span>
+              <span class="chip">Marmoset</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2D WORK ============ -->
+    <section id="work-2d" class="py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <div class="flex items-end justify-between gap-6 reveal">
+          <div>
+            <div class="text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">Selected · 2D</div>
+            <h2 class="mt-3 font-display text-4xl sm:text-5xl tracking-tight">Illustration & character design</h2>
+          </div>
+          <div class="hidden sm:block text-sm text-cream-muted dark:text-muted">2023 — 2026</div>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-5">
+          <figure class="art-card aspect-[3/4] lg:col-span-7 lg:row-span-2" data-title="Vulpine — full character" data-tag="2D · Anthro design">
+            <img src="images/vulpine-character.jpg" alt="Yellow anthro vulpine character — full body design" loading="lazy" class="art-bg w-full h-full object-cover" />
+          </figure>
+          <figure class="art-card aspect-square lg:col-span-5" data-title="Draconyss, golden shore" data-tag="2D · Illustration">
+            <img src="images/draconyss-beach.jpg" alt="Pink draconyss character on a beach" loading="lazy" class="art-bg w-full h-full object-cover" />
+          </figure>
+          <figure class="art-card aspect-[16/10] lg:col-span-5" data-title="Zarynth Blazeveil the Draconyss — character sheet" data-tag="2D · Reference">
+            <img src="images/zarynth-blazeveil-ref.jpg" alt="Character reference sheet for Zarynth Blazeveil the Draconyss" loading="lazy" class="art-bg w-full h-full object-cover" />
+          </figure>
+        </div>
+
+        <p class="mt-8 text-sm text-cream-muted dark:text-muted reveal">
+          More illustrations & character work added regularly. Want something like this for your OC?
+          <a href="#commissions" class="underline-offset-4 hover:underline text-cream-text dark:text-text">See commission tiers →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ 3D WORK ============ -->
+    <section id="work-3d" class="py-24 sm:py-32 relative">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <div class="flex items-end justify-between gap-6 reveal">
+          <div>
+            <div class="text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">In studio · 3D</div>
+            <h2 class="mt-3 font-display text-4xl sm:text-5xl tracking-tight">Sculpts & character renders</h2>
+          </div>
+          <div class="hidden sm:block text-sm text-cream-muted dark:text-muted">Blender · ZBrush · Substance</div>
+        </div>
+
+        <div class="mt-12 grid sm:grid-cols-3 gap-3 sm:gap-5 reveal">
+          <div class="rounded-3xl border border-dashed border-cream-line dark:border-line aspect-[4/5] p-6 flex flex-col justify-between bg-cream-surface/40 dark:bg-surface/40 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-plum/10 to-accent/10 dark:from-accent/10 dark:to-plum/10 opacity-60"></div>
+            <span class="relative text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">Work in progress</span>
+            <div class="relative">
+              <div class="font-display text-2xl">Stylized busts</div>
+              <p class="text-sm text-cream-muted dark:text-muted mt-2">High-poly sculpts moving through retopo and texturing.</p>
+            </div>
+          </div>
+          <div class="rounded-3xl border border-dashed border-cream-line dark:border-line aspect-[4/5] p-6 flex flex-col justify-between bg-cream-surface/40 dark:bg-surface/40 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-accent/15 to-plum/10 opacity-60"></div>
+            <span class="relative text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">Coming soon</span>
+            <div class="relative">
+              <div class="font-display text-2xl">Full characters</div>
+              <p class="text-sm text-cream-muted dark:text-muted mt-2">Anthro and dragonkin pieces — beauty renders + turntables.</p>
+            </div>
+          </div>
+          <div class="rounded-3xl border border-cream-line dark:border-line aspect-[4/5] p-6 flex flex-col justify-between bg-plum/90 dark:bg-accent/90 text-cream dark:text-ink relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.25),transparent_60%)]"></div>
+            <span class="relative text-xs uppercase tracking-[0.2em] opacity-80">Be first to see</span>
+            <div class="relative">
+              <div class="font-display text-2xl leading-tight">3D drops land here soon.</div>
+              <p class="text-sm opacity-80 mt-3">Want to commission a 3D character now? The slate opens monthly.</p>
+              <a href="#commissions" class="mt-5 inline-flex items-center gap-2 text-sm font-medium border-b border-current pb-1 hover:opacity-80 transition">
+                See 3D tier
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NSFW (off-site) ============ -->
+    <section id="nsfw-link" class="py-12 sm:py-16">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <a href="https://itaku.ee/profile/zarynthblazze/gallery" id="nsfw-card" target="_blank" rel="noopener noreferrer" class="block rounded-3xl border border-cream-line dark:border-line bg-cream-surface/60 dark:bg-surface/60 backdrop-blur-xl p-6 sm:p-8 relative overflow-hidden group reveal">
+          <div class="absolute inset-0 bg-gradient-to-r from-plum/10 via-transparent to-accent/10 opacity-70"></div>
+          <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <div class="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">
+                <span class="inline-block px-2 py-0.5 rounded-full border border-current text-[0.65rem]">18+</span>
+                Mature gallery · Itaku
+              </div>
+              <h3 class="mt-3 font-display text-2xl sm:text-3xl">
+                NSFW work lives on Itaku
+              </h3>
+              <p class="mt-2 text-sm text-cream-muted dark:text-muted max-w-xl">
+                Mature character art is hosted on Itaku. Click through if you're 18+ and toggle the maturity filter to view — no account required.
+              </p>
+            </div>
+            <span class="inline-flex items-center gap-2 rounded-full bg-plum dark:bg-accent text-cream dark:text-ink px-5 py-3 text-sm font-medium group-hover:opacity-90 transition shrink-0">
+              View on Itaku
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ COMMISSIONS ============ -->
+    <section id="commissions" class="py-28 sm:py-40">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <div class="max-w-2xl reveal">
+          <div class="text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">Commissions</div>
+          <h2 class="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.05]">
+            Bring your character <span class="italic text-plum dark:text-accent">to life.</span>
+          </h2>
+          <p class="mt-6 text-cream-muted dark:text-muted leading-relaxed">
+            A small, considered slate of commission tiers — pick the one that fits the brief.
+            Custom scopes (group pieces, animation, full 3D pipelines) are quoted on request.
+          </p>
+        </div>
+
+        <div class="mt-14 grid md:grid-cols-3 gap-4 sm:gap-6">
+          <article class="tier reveal">
+            <header class="flex items-baseline justify-between">
+              <h3 class="font-display text-2xl">Sketch</h3>
+              <span class="text-sm text-cream-muted dark:text-muted">2D</span>
+            </header>
+            <div class="mt-4 font-display text-5xl">$60<span class="text-base text-cream-muted dark:text-muted font-sans">+</span></div>
+            <p class="mt-2 text-sm text-cream-muted dark:text-muted">Loose, expressive line work — perfect for character ideation.</p>
+            <ul class="mt-6 space-y-2.5 text-sm">
+              <li class="tier-item">Single character, bust crop</li>
+              <li class="tier-item">Monochrome + tone</li>
+              <li class="tier-item">1 revision pass</li>
+              <li class="tier-item">~7 day turnaround</li>
+            </ul>
+            <a href="#contact" class="tier-cta">Request a sketch</a>
+          </article>
+
+          <article class="tier featured reveal">
+            <header class="flex items-baseline justify-between">
+              <h3 class="font-display text-2xl">Illustration</h3>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-plum dark:bg-accent text-cream dark:text-ink font-medium">Most loved</span>
+            </header>
+            <div class="mt-4 font-display text-5xl">$180<span class="text-base text-cream-muted dark:text-muted font-sans">+</span></div>
+            <p class="mt-2 text-sm text-cream-muted dark:text-muted">Full-color half-body or full-body 2D character illustration with light scene.</p>
+            <ul class="mt-6 space-y-2.5 text-sm">
+              <li class="tier-item">Full rendering & color</li>
+              <li class="tier-item">Mood-matched background</li>
+              <li class="tier-item">2 revision passes</li>
+              <li class="tier-item">~2–3 week turnaround</li>
+            </ul>
+            <a href="#contact" class="tier-cta featured-cta">Request illustration</a>
+          </article>
+
+          <article class="tier reveal">
+            <header class="flex items-baseline justify-between">
+              <h3 class="font-display text-2xl">3D Character</h3>
+              <span class="text-sm text-cream-muted dark:text-muted">3D</span>
+            </header>
+            <div class="mt-4 font-display text-5xl">$450<span class="text-base text-cream-muted dark:text-muted font-sans">+</span></div>
+            <p class="mt-2 text-sm text-cream-muted dark:text-muted">Stylized 3D character sculpt — clean topology and beauty renders.</p>
+            <ul class="mt-6 space-y-2.5 text-sm">
+              <li class="tier-item">High-res sculpt + retopo</li>
+              <li class="tier-item">PBR texturing</li>
+              <li class="tier-item">3 beauty renders + turntable</li>
+              <li class="tier-item">~4–6 week turnaround</li>
+            </ul>
+            <a href="#contact" class="tier-cta">Request 3D commission</a>
+          </article>
+        </div>
+
+        <p class="mt-10 text-sm text-cream-muted dark:text-muted reveal">
+          Slots open monthly — current queue: <span class="text-cream-text dark:text-text">2 of 4 filled</span>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="py-28 sm:py-40">
+      <div class="mx-auto max-w-5xl px-5 sm:px-8">
+        <div class="rounded-[2rem] border border-cream-line dark:border-line bg-cream-surface/60 dark:bg-surface/60 backdrop-blur-xl p-8 sm:p-14 relative overflow-hidden reveal">
+          <div class="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-plum/20 dark:bg-accent/20 blur-3xl"></div>
+          <div class="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-accent/20 dark:bg-plum/20 blur-3xl"></div>
+
+          <div class="relative">
+            <div class="text-xs uppercase tracking-[0.2em] text-cream-muted dark:text-muted">Contact</div>
+            <h2 class="mt-3 font-display text-4xl sm:text-6xl tracking-tight leading-[1.02]">
+              Let's make something<br/><span class="italic text-plum dark:text-accent">unforgettable.</span>
+            </h2>
+
+            <div class="mt-10 grid sm:grid-cols-2 gap-3">
+              <a href="mailto:zarynthblazze@gmail.com" class="contact-card group">
+                <div>
+                  <div class="text-xs uppercase tracking-widest text-cream-muted dark:text-muted">Email</div>
+                  <div class="mt-1 font-display text-xl break-all">zarynthblazze@gmail.com</div>
+                </div>
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+              <a href="https://itaku.ee/profile/zarynthblazze/gallery" target="_blank" rel="noopener noreferrer" class="contact-card group">
+                <div>
+                  <div class="text-xs uppercase tracking-widest text-cream-muted dark:text-muted">Itaku</div>
+                  <div class="mt-1 font-display text-xl">@zarynthblazze</div>
+                </div>
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+              <a href="https://x.com/zarynth_blazze" target="_blank" rel="noopener noreferrer" class="contact-card group">
+                <div>
+                  <div class="text-xs uppercase tracking-widest text-cream-muted dark:text-muted">Twitter / X</div>
+                  <div class="mt-1 font-display text-xl">@zarynth_blazze</div>
+                </div>
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+
+            <p class="mt-10 text-sm text-cream-muted dark:text-muted">
+              For commissions, please include a brief, references, and any deadlines. Replies within 48 hours.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="border-t border-cream-line dark:border-line py-10">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-cream-muted dark:text-muted">
+        <div class="flex items-center gap-2">
+          <span class="grid place-items-center w-7 h-7 rounded-full bg-plum dark:bg-accent text-cream dark:text-ink font-display text-xs">Z</span>
+          <span>© 2026 Zarynth Blazze. All work shown is original.</span>
+        </div>
+        <a href="#top" class="hover:text-cream-text dark:hover:text-text inline-flex items-center gap-2">
+          Back to top
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div id="lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-ink/90 backdrop-blur-xl p-6">
+    <button id="lightbox-close" class="absolute top-6 right-6 w-11 h-11 grid place-items-center rounded-full border border-text/20 text-text hover:bg-text/10 transition">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <figure class="max-w-4xl w-full">
+      <img id="lightbox-image" alt="" class="block w-full max-h-[80vh] object-contain rounded-2xl bg-surface" />
+      <figcaption class="mt-4 flex items-center justify-between text-text">
+        <span id="lightbox-title" class="font-display text-xl"></span>
+        <span id="lightbox-tag" class="text-xs uppercase tracking-widest text-muted"></span>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- GSAP & Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

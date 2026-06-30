@@ -1,0 +1,382 @@
+/* ========================================================
+   Zarynth Blazze — custom styles layered on top of Tailwind
+   ======================================================== */
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(232, 181, 137, 0.08), transparent 60%),
+    radial-gradient(1000px 500px at -10% 30%, rgba(107, 75, 110, 0.08), transparent 60%);
+  background-attachment: fixed;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html:not(.dark) body {
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(107, 75, 110, 0.10), transparent 60%),
+    radial-gradient(1000px 500px at -10% 30%, rgba(232, 181, 137, 0.18), transparent 60%);
+}
+
+/* ========== Ambient orbs ========== */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.orb-1 { width: 520px; height: 520px; top: -120px; left: -120px;
+  background: radial-gradient(circle, rgba(107,75,110,0.55), transparent 70%);
+  animation: float 14s ease-in-out infinite;
+}
+.orb-2 { width: 460px; height: 460px; top: 30%; right: -140px;
+  background: radial-gradient(circle, rgba(232,181,137,0.45), transparent 70%);
+  animation: float 18s ease-in-out infinite reverse;
+}
+.orb-3 { width: 600px; height: 600px; bottom: -200px; left: 30%;
+  background: radial-gradient(circle, rgba(155,217,195,0.30), transparent 70%);
+  animation: float 22s ease-in-out infinite;
+}
+html.dark .orb { opacity: 0.4; }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(40px, -30px); }
+}
+
+/* ========== Film grain ========== */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* ========== Nav ========== */
+.nav-link {
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.25s ease;
+}
+.nav-link:hover { color: var(--tw-prose-body, currentColor); }
+html.dark .nav-link:hover { color: #EDE9E3; }
+html:not(.dark) .nav-link:hover { color: #1A1620; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(.65,0,.35,1);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+#nav.is-scrolled {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0 8px 32px -16px rgba(0,0,0,0.35);
+}
+
+/* ========== Reveal ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+/* ========== Hero showcase cards ========== */
+.hero-card {
+  box-shadow: 0 20px 60px -30px rgba(0,0,0,0.6);
+  transition: transform 0.6s cubic-bezier(.2,.7,.2,1), box-shadow 0.6s ease;
+}
+.hero-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 30px 80px -30px rgba(0,0,0,0.7);
+}
+
+/* ========== Marquee ========== */
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ========== Chips ========== */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 9999px;
+  border: 1px solid;
+  border-color: rgb(231 223 213);
+  background-color: rgba(255,255,255,0.5);
+  color: #1A1620;
+}
+html.dark .chip {
+  border-color: rgb(42 40 50);
+  background-color: rgba(30,28,36,0.5);
+  color: #EDE9E3;
+}
+
+/* ========== Art card ========== */
+.art-card {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #16151B;
+  box-shadow: 0 20px 60px -30px rgba(0,0,0,0.5);
+  transition: transform 0.6s cubic-bezier(.2,.7,.2,1), box-shadow 0.6s ease;
+}
+.art-card::before {
+  content: attr(data-title);
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  font-family: 'Fraunces', serif;
+  font-size: 1.05rem;
+  color: #fff;
+  z-index: 3;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1), opacity 0.4s ease;
+}
+.art-card::after {
+  content: attr(data-tag);
+  position: absolute;
+  left: 18px;
+  bottom: 4px;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  z-index: 3;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1) 0.06s, opacity 0.4s ease 0.06s;
+}
+.art-card .art-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.9s cubic-bezier(.2,.7,.2,1), filter 0.5s ease;
+  filter: saturate(0.95);
+}
+.art-card::before,
+.art-card::after { padding-bottom: 4px; }
+.art-card .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+.art-card:hover .art-bg {
+  transform: scale(1.08);
+  filter: saturate(1.05);
+}
+.art-card:hover::before,
+.art-card:hover::after { opacity: 1; transform: translateY(0); }
+.art-card:hover { box-shadow: 0 30px 80px -30px rgba(0,0,0,0.7); }
+
+/* gradient overlay (built into bg via pseudo) */
+.art-card::before { z-index: 4; }
+.art-card::after  { z-index: 4; }
+
+/* Always-on subtle vignette + stronger gradient on hover so the
+   data-title / data-tag labels stay readable on images. */
+.art-card {
+  box-shadow: inset 0 -40px 80px -40px rgba(0,0,0,0.45),
+              0 20px 60px -30px rgba(0,0,0,0.5);
+}
+.art-card:hover {
+  box-shadow: inset 0 -90px 100px -40px rgba(0,0,0,0.7),
+              0 30px 80px -30px rgba(0,0,0,0.7);
+}
+/* img.art-bg needs object-fit so it fills the card */
+img.art-bg {
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Tilt cards (3D section) */
+.art-card.tilt {
+  transform-style: preserve-3d;
+  perspective: 800px;
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1), box-shadow 0.5s ease;
+}
+
+/* ========== Commission tiers ========== */
+.tier {
+  position: relative;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid;
+  border-color: rgb(231 223 213);
+  background-color: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1), box-shadow 0.5s ease, border-color 0.3s ease;
+}
+html.dark .tier {
+  border-color: rgb(42 40 50);
+  background-color: rgba(30,28,36,0.6);
+}
+.tier:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px -30px rgba(0,0,0,0.4);
+  border-color: rgba(107, 75, 110, 0.6);
+}
+html.dark .tier:hover {
+  border-color: rgba(232, 181, 137, 0.5);
+}
+.tier.featured {
+  background: linear-gradient(180deg, rgba(107,75,110,0.10), rgba(255,255,255,0.6));
+  border-color: rgba(107,75,110,0.35);
+}
+html.dark .tier.featured {
+  background: linear-gradient(180deg, rgba(232,181,137,0.12), rgba(30,28,36,0.7));
+  border-color: rgba(232,181,137,0.35);
+}
+
+.tier-item {
+  position: relative;
+  padding-left: 22px;
+  color: #1A1620;
+}
+html.dark .tier-item { color: #EDE9E3; }
+.tier-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 12px;
+  height: 1.5px;
+  background: #6B4B6E;
+}
+html.dark .tier-item::before { background: #E8B589; }
+
+.tier-cta {
+  margin-top: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid rgb(231 223 213);
+  color: #1A1620;
+  background: transparent;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.tier-cta:hover {
+  background: #1A1620;
+  color: #F7F3EE;
+  border-color: #1A1620;
+}
+html.dark .tier-cta {
+  border-color: rgb(42 40 50);
+  color: #EDE9E3;
+}
+html.dark .tier-cta:hover {
+  background: #EDE9E3;
+  color: #16151B;
+  border-color: #EDE9E3;
+}
+.featured-cta {
+  background: #6B4B6E;
+  border-color: #6B4B6E;
+  color: #F7F3EE;
+}
+.featured-cta:hover {
+  background: #4D3251;
+  border-color: #4D3251;
+  color: #F7F3EE;
+}
+html.dark .featured-cta {
+  background: #E8B589;
+  border-color: #E8B589;
+  color: #16151B;
+}
+html.dark .featured-cta:hover {
+  background: #C99572;
+  border-color: #C99572;
+  color: #16151B;
+}
+
+/* ========== Contact cards ========== */
+.contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px;
+  border: 1px solid rgb(231 223 213);
+  background: rgba(255,255,255,0.6);
+  border-radius: 22px;
+  color: inherit;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+html.dark .contact-card {
+  border-color: rgb(42 40 50);
+  background: rgba(30,28,36,0.6);
+}
+.contact-card:hover {
+  border-color: rgba(107,75,110,0.6);
+  background: rgba(255,255,255,0.85);
+  transform: translateY(-2px);
+}
+html.dark .contact-card:hover {
+  border-color: rgba(232,181,137,0.55);
+  background: rgba(30,28,36,0.85);
+}
+
+/* ========== Lightbox ========== */
+#lightbox.is-open {
+  display: flex;
+  animation: lightboxIn 0.35s ease forwards;
+}
+@keyframes lightboxIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ========== Misc ========== */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(107,75,110,0.3);
+  border-radius: 999px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(232,181,137,0.25);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(107,75,110,0.55);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(232,181,137,0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
