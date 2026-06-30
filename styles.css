@@ -8,50 +8,62 @@ body {
 }
 
 body {
+  /* No background-attachment: fixed — it is a major scroll-jank source. */
+  background-color: #0E0D12;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+html:not(.dark) body {
+  background-color: #F7F3EE;
+}
+
+/* Static page-wide tint, painted once into a fixed layer so it never repaints on scroll. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
   background-image:
     radial-gradient(1200px 600px at 80% -10%, rgba(232, 181, 137, 0.08), transparent 60%),
     radial-gradient(1000px 500px at -10% 30%, rgba(107, 75, 110, 0.08), transparent 60%);
-  background-attachment: fixed;
-  transition: background-color 0.4s ease, color 0.4s ease;
 }
-
-html:not(.dark) body {
+html:not(.dark) body::before {
   background-image:
     radial-gradient(1200px 600px at 80% -10%, rgba(107, 75, 110, 0.10), transparent 60%),
     radial-gradient(1000px 500px at -10% 30%, rgba(232, 181, 137, 0.18), transparent 60%);
 }
 
-/* ========== Ambient orbs ========== */
+/* ========== Ambient orbs — gentler blur, GPU-only animation ========== */
 .orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(60px);
+  opacity: 0.45;
+  transform: translate3d(0, 0, 0);
   will-change: transform;
 }
-.orb-1 { width: 520px; height: 520px; top: -120px; left: -120px;
-  background: radial-gradient(circle, rgba(107,75,110,0.55), transparent 70%);
-  animation: float 14s ease-in-out infinite;
+.orb-1 { width: 420px; height: 420px; top: -100px; left: -100px;
+  background: radial-gradient(circle, rgba(107,75,110,0.5), transparent 70%);
+  animation: orbFloat 22s ease-in-out infinite;
 }
-.orb-2 { width: 460px; height: 460px; top: 30%; right: -140px;
-  background: radial-gradient(circle, rgba(232,181,137,0.45), transparent 70%);
-  animation: float 18s ease-in-out infinite reverse;
+.orb-2 { width: 380px; height: 380px; top: 35%; right: -120px;
+  background: radial-gradient(circle, rgba(232,181,137,0.4), transparent 70%);
+  animation: orbFloat 28s ease-in-out infinite reverse;
 }
-.orb-3 { width: 600px; height: 600px; bottom: -200px; left: 30%;
-  background: radial-gradient(circle, rgba(155,217,195,0.30), transparent 70%);
-  animation: float 22s ease-in-out infinite;
+.orb-3 { width: 480px; height: 480px; bottom: -180px; left: 30%;
+  background: radial-gradient(circle, rgba(155,217,195,0.28), transparent 70%);
+  animation: orbFloat 34s ease-in-out infinite;
 }
-html.dark .orb { opacity: 0.4; }
+html.dark .orb { opacity: 0.32; }
 
-@keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  50%      { transform: translate(40px, -30px); }
+@keyframes orbFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(30px, -22px, 0); }
 }
 
-/* ========== Film grain ========== */
+/* ========== Film grain — no blend mode (cheap, but skip the repaint cost) ========== */
 .grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
 }
 
 /* ========== Nav ========== */
@@ -370,6 +382,19 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 html.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(232,181,137,0.5);
+}
+
+/* ========== Scroll-perf helpers ========== */
+/* Let the browser skip painting offscreen sections during scroll. */
+main > section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* Promote the moving things to their own GPU layer */
+.marquee,
+.hero-card,
+.art-card {
+  transform: translateZ(0);
 }
 
 @media (prefers-reduced-motion: reduce) {

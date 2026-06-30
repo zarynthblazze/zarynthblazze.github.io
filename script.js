@@ -34,13 +34,22 @@
     a.addEventListener('click', () => mobileMenu.classList.add('hidden'))
   );
 
-  /* ---------- Lenis smooth scroll ---------- */
+  /* ---------- Lenis smooth scroll (desktop fine-pointer only) ----------
+     Lenis can fight native touch scroll on mobile and cause jank, so we
+     gate it to mouse/trackpad devices and respect reduced-motion. */
   let lenis;
-  if (window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const allowLenis =
+    window.Lenis &&
+    !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+    matchMedia('(hover: hover) and (pointer: fine)').matches &&
+    window.innerWidth >= 1024;
+
+  if (allowLenis) {
     lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.0,
       easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      smoothTouch: false,
     });
     function raf(time) {
       lenis.raf(time);
@@ -208,23 +217,7 @@
     if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
   });
 
-  /* ---------- Cursor-follow accent on hero ---------- */
-  if (isFinePointer) {
-    const orbs = document.querySelectorAll('.orb');
-    let mx = 0, my = 0, tx = 0, ty = 0;
-    window.addEventListener('mousemove', e => {
-      mx = (e.clientX / window.innerWidth - 0.5);
-      my = (e.clientY / window.innerHeight - 0.5);
-    });
-    function loop() {
-      tx += (mx - tx) * 0.04;
-      ty += (my - ty) * 0.04;
-      orbs.forEach((orb, i) => {
-        const depth = (i + 1) * 18;
-        orb.style.translate = `${tx * depth}px ${ty * depth}px`;
-      });
-      requestAnimationFrame(loop);
-    }
-    loop();
-  }
+  /* Cursor-follow orb effect removed — the always-on RAF loop was
+     writing transforms to three heavily-blurred elements every frame,
+     forcing compositor work that caused noticeable scroll jank. */
 })();
