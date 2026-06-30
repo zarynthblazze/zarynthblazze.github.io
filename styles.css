@@ -385,11 +385,8 @@ html.dark ::-webkit-scrollbar-thumb:hover {
 }
 
 /* ========== Scroll-perf helpers ========== */
-/* Let the browser skip painting offscreen sections during scroll. */
-main > section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
-}
+/* content-visibility:auto was removed — it caused paint stutters as new
+   sections rendered during scroll, contributing to the "burst" feel. */
 /* Promote the moving things to their own GPU layer */
 .marquee,
 .hero-card,

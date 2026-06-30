@@ -34,31 +34,12 @@
     a.addEventListener('click', () => mobileMenu.classList.add('hidden'))
   );
 
-  /* ---------- Lenis smooth scroll (desktop fine-pointer only) ----------
-     Lenis can fight native touch scroll on mobile and cause jank, so we
-     gate it to mouse/trackpad devices and respect reduced-motion. */
-  let lenis;
-  const allowLenis =
-    window.Lenis &&
-    !matchMedia('(prefers-reduced-motion: reduce)').matches &&
-    matchMedia('(hover: hover) and (pointer: fine)').matches &&
-    window.innerWidth >= 1024;
+  /* Lenis removed — its momentum-based wheel interpolation produced the
+     "slow then sudden fast" feel users reported. Native browser scroll
+     is smooth enough and ScrollTrigger works directly with it. */
+  const lenis = null;
 
-  if (allowLenis) {
-    lenis = new Lenis({
-      duration: 1.0,
-      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      smoothTouch: false,
-    });
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-  }
-
-  // anchor links → use lenis if available
+  // anchor links → native smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
       const id = link.getAttribute('href');
@@ -66,11 +47,7 @@
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
-      if (lenis) {
-        lenis.scrollTo(target, { offset: -80, duration: 1.3 });
-      } else {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
@@ -86,13 +63,6 @@
   /* ---------- GSAP reveal + parallax ---------- */
   if (window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
-
-    // sync ScrollTrigger with lenis
-    if (lenis) {
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(t => lenis.raf(t * 1000));
-      gsap.ticker.lagSmoothing(0);
-    }
 
     // reveal-on-scroll
     gsap.utils.toArray('.reveal').forEach((el, i) => {
@@ -196,14 +166,12 @@
     lightbox.classList.add('is-open');
     lightbox.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    if (lenis) lenis.stop();
   };
 
   const closeLightbox = () => {
     lightbox.classList.remove('is-open');
     lightbox.classList.add('hidden');
     document.body.style.overflow = '';
-    if (lenis) lenis.start();
   };
 
   document.querySelectorAll('.art-card').forEach(card => {
